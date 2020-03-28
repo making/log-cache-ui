@@ -1,5 +1,3 @@
-application-default.properties
-
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -31,3 +29,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/log-cache-proxy/src/main/resources/application-default.properties

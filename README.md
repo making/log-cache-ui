@@ -19,3 +19,15 @@ uaac client add log_cache_ui \
   --refresh_token_validity 259200 \
   --redirect_uri http://localhost:8080/login/oauth2/code/uaa
 ```
+
+### Run with Docker
+
+```
+docker run \
+  -e SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_UAA_ISSUER_URI=https://uaa.${SYSTEM_DOMAIN}/oauth/token \
+  -e SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_UAA_CLIENT_SECRET=CHANGEME \
+  -p 8080:8080 \
+  making/log-cache-ui
+```
+
+Go to http://localhost:8080/index.html

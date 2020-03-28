@@ -14,7 +14,7 @@ uaac token client get admin -s ${ADMIN_CLIENT_SECRET}
 uaac client add log_cache_ui \
   --secret CHANGEME \
   --authorized_grant_types refresh_token,authorization_code \
-  --scope openid,doppler.firehose,logs.admin,cloud_controller.read \
+  --scope openid,doppler.firehose,logs.admin \
   --access_token_validity 43200 \
   --refresh_token_validity 259200 \
   --redirect_uri http://localhost:8080/login/oauth2/code/uaa

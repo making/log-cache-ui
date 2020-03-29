@@ -9,6 +9,7 @@ function App() {
     const [data, setData] = useState([]);
     const [duration, setDuration] = useState('PT30M');
     const [step, setStep] = useState(10);
+    const [autoReload, setAutoReload] = useState(false);
     const [sourceIds, setSourceIds] = useState([]);
 
     const onKeyDown = event => {
@@ -17,6 +18,7 @@ function App() {
             query(promql, duration, step, setIsLoading, setData);
         }
     };
+    const reload = () => onKeyDown({key: 'Enter'});
     return (
         <div className="App">
             <h1>Log Cache UI</h1>
@@ -38,6 +40,15 @@ function App() {
                                       onChange={event => setStep(event.target.value)}
                                       onKeyDown={onKeyDown}/></label>
             <br/>
+            <label>Auto Reload: <input type="checkbox" onChange={event => {
+                const checked = event.target.checked;
+                setAutoReload(checked);
+                if (checked) {
+                    setInterval(reload, 30000);
+                } else {
+                    clearInterval(reload);
+                }
+            }}/></label>
             <br/>
             <Container title={{text: `${promql}`}} loading={isLoading}>
                 <LineChart
@@ -58,7 +69,8 @@ function App() {
             <h3>Available Source IDs</h3>
             <button onClick={() => loadSourceIds(setSourceIds)}>Load</button>
             <ul>{sourceIds.map(m => <li key={m}><code>{m}</code>&nbsp;
-                <a onClick={() => appendSourceId(m, setPromql)} href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
+                <a onClick={() => appendSourceId(m, setPromql)}
+                   href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
                 <a href={`/read/${m}`} target={'_blank'}>Retrieve Data</a>
             </li>)}</ul>
         </div>
@@ -87,6 +99,7 @@ function appendSourceId(sourceId, setPromql) {
 }
 
 function query(promql, duration, step, setIsLoading, setData) {
+    console.log('Querying...');
     const params = new URLSearchParams();
     params.set('promql', promql);
     params.set('duration', duration);

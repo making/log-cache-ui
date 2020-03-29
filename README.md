@@ -3,16 +3,22 @@
 A GUI for Cloud Foundry [Log Cache](https://github.com/cloudfoundry/log-cache-release/blob/develop/src/README.md).
 It's easier than [Log Cache CLI](https://github.com/cloudfoundry/log-cache-cli).
 
-For example
+> Log Cache UI supports only Metrics.
+
+### Examples
 
 Log Transport Throughput: [`rate(ingress{source_id="doppler"}[1m])`](http://localhost:8080/index.html#rate(ingress%7Bsource_id%3D%22doppler%22%7D%5B1m%5D))
-![image](https://user-images.githubusercontent.com/106908/77842862-3be29f80-71d2-11ea-9616-ed0232a256cb.png)
+![image](https://user-images.githubusercontent.com/106908/77849315-c395d180-7205-11ea-8d25-d7a081f60c9c.png)
 
 Router Throughput: [`rate(total_requests{source_id="gorouter"}[1m])`](http://localhost:8080/index.html#rate(total_requests%7Bsource_id%3D%22gorouter%22%7D%5B1m%5D))
-![image](https://user-images.githubusercontent.com/106908/77842871-53218d00-71d2-11ea-963a-aa4a61f76256.png)
+![image](https://user-images.githubusercontent.com/106908/77849338-ed4ef880-7205-11ea-9f79-36541fc8382a.png)
 
 Diego Cell Remaining Memory: [`100 * CapacityRemainingMemory{source_id="rep"} / CapacityTotalMemory{source_id="rep"}`](http://localhost:8080/index.html#100%20*%20CapacityRemainingMemory%7Bsource_id%3D%22rep%22%7D%20%2F%20CapacityTotalMemory%7Bsource_id%3D%22rep%22%7D)
-![image](https://user-images.githubusercontent.com/106908/77843545-29b82f80-71d9-11ea-88ef-491457cd4b4b.png)
+![image](https://user-images.githubusercontent.com/106908/77849357-09eb3080-7206-11ea-82a5-05b828e1a6ee.png)
+
+You don't need to know metrics names as supported metrics are listed.
+
+![image](https://user-images.githubusercontent.com/106908/77848705-a6f79a80-7201-11ea-8e7b-09506639368e.png)
 
 ### Create a UAA Client
 

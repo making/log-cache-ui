@@ -20,6 +20,13 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    - name: mvn test
+      env:
+        SYSTEM_DOMAIN: run.pivotal.io
+        UAA_CLIENT_SECRET: dummy 
+      run: |
+        set -e    
+        ./mvnw -V test          
     - name: mvn package
       run: |
         set -e

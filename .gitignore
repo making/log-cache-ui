@@ -30,3 +30,4 @@ build/
 ### VS Code ###
 .vscode/
 /log-cache-proxy/src/main/resources/application-default.properties
+/log-cache-frontend/package-lock.json

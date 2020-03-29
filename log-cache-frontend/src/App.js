@@ -92,9 +92,7 @@ function loadSourceIds(setSourceIds) {
         .catch(e => console.error(e))
         .then(json => {
             if (json.meta) {
-                setSourceIds(prevState => {
-                    return Object.keys(json.meta);
-                });
+                setSourceIds(Object.keys(json.meta));
             } else {
                 alert(JSON.stringify(json, null, '  '));
             }
@@ -111,18 +109,16 @@ function query(promql, duration, step, setIsLoading, setData) {
     params.set('promql', promql);
     params.set('duration', duration);
     params.set('step', step);
-    setIsLoading(prevState => true);
+    setIsLoading(true);
     fetch(`/query_range?${params}`)
         .then(res => {
-            setIsLoading(prevState => false);
+            setIsLoading(false);
             return res.json();
         })
         .catch(e => console.error(e))
         .then(json => {
             if (json && json.data && json.data.result) {
-                setData(prevState => {
-                    return json.data.result;
-                });
+                setData(json.data.result);
             } else {
                 alert(JSON.stringify(json, null, '  '));
             }

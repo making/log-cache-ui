@@ -10,6 +10,7 @@ function App() {
     const [duration, setDuration] = useState('PT30M');
     const [step, setStep] = useState(10);
     const [autoReload, setAutoReload] = useState(null);
+    const [showAllLabels, setShowAllLabels] = useState(false);
     const [sourceIds, setSourceIds] = useState([]);
 
     const onKeyDown = event => {
@@ -48,6 +49,10 @@ function App() {
                     setAutoReload(null);
                 }
             }}/></label>
+            &nbsp;<label>Show All Labels: <input type="checkbox" onChange={event => {
+            const checked = event.target.checked;
+            setShowAllLabels(checked);
+        }}/></label>
             <br/>
             <Container title={{text: `${promql}`}} loading={isLoading}>
                 <LineChart
@@ -56,6 +61,9 @@ function App() {
                     data={data}
                     promQLSeriesKey={d => {
                         const metrics = d.metric;
+                        if (showAllLabels) {
+                            return JSON.stringify(d.metric);
+                        }
                         if (metrics.application) {
                             return `${metrics.organization}/${metrics.space}/${metrics.application}/${metrics.applicationInstance}`;
                         }

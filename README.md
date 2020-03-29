@@ -69,3 +69,24 @@ docker run \
   -p 8080:8080 \
   making/log-cache-ui
 ```
+
+If you want to deploy log-cache-ui to Cloud Foundry, use the following `manifest.yml`
+
+```
+applications:
+- name: log-cache-ui
+  docker:
+    image: making/log-cache-ui
+  memory: 256m
+  env:
+    SYSTEM_DOMAIN: ((system_domain))
+    UAA_CLIENT_SECRET: CHANGEME
+    JAVA_OPTS: "-XX:ReservedCodeCacheSize=32M -Xss512k"
+    BPL_THREAD_COUNT: 20
+```
+
+then
+
+```
+cf push --var system_domain=${SYSTEM_DOMAIN}
+```

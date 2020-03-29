@@ -21,7 +21,7 @@ function App() {
         <div className="App">
             <h1>Log Cache UI</h1>
             <label>PromQL: <input value={promql}
-                                  size={150}
+                                  size={100}
                                   placeholder={'PromQL'}
                                   onChange={event => setPromql(event.target.value)}
                                   onKeyDown={onKeyDown}

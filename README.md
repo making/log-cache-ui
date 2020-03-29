@@ -23,8 +23,11 @@ You don't need to know metrics names as supported metrics are listed.
 ### Create a UAA Client
 
 ```
-SYSTEM_DOMAN=sys.your-cf.example.com
+SYSTEM_DOMAIN=sys.your-cf.example.com
 ADMIN_CLIENT_SECRET=...
+REDIRECT_URLS=http://localhost:8080/login/oauth2/code/uaa
+# or
+# REDIRECT_URLS=https://log-cache-ui.${APPS_DOMAIN}/login/oauth2/code/uaa
 
 uaac target https://uaa.${SYSTEM_DOMAIN} --skip-ssl-validation
 uaac token client get admin -s ${ADMIN_CLIENT_SECRET}
@@ -35,7 +38,7 @@ uaac client add log_cache_ui \
   --scope openid,doppler.firehose,logs.admin \
   --access_token_validity 43200 \
   --refresh_token_validity 259200 \
-  --redirect_uri http://localhost:8080/login/oauth2/code/uaa
+  --redirect_uri ${REDIRECT_URLS}
 ```
 
 ### Run with Docker

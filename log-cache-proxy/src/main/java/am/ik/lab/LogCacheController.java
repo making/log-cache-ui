@@ -2,6 +2,9 @@ package am.ik.lab;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,11 @@ public class LogCacheController {
                 .baseUrl(logCacheUri)
                 .filter(oauth)
                 .build();
+    }
+
+    @GetMapping(path = "/")
+    public ResponseEntity<?> index() {
+        return ResponseEntity.status(HttpStatus.SEE_OTHER).header(HttpHeaders.LOCATION, "/index.html").build();
     }
 
     @GetMapping(path = "/query_range")

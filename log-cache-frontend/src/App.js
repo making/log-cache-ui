@@ -11,7 +11,7 @@ function App() {
     const [step, setStep] = useState(10);
     const [autoReload, setAutoReload] = useState(null);
     const [showAllLabels, setShowAllLabels] = useState(false);
-    const [sourceIds, setSourceIds] = useState([]);
+    const [sourceIds, setSourceIds] = useState({components: [], apps: []});
 
     const onKeyDown = event => {
         if (event.key === 'Enter' && promql.length > 0) {
@@ -79,10 +79,17 @@ function App() {
             </Container>
             <h3>Available Source IDs</h3>
             <button onClick={() => loadSourceIds(setSourceIds)}>Load</button>
-            <ul>{sourceIds.map(m => <li key={m}><code>{m}</code>&nbsp;
+            <h4>Components</h4>
+            <ul>{sourceIds.components.map(m => <li key={m}><code>{m}</code>&nbsp;
                 <a onClick={() => appendSourceId(m, setPromql)}
                    href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
-                <a href={`/read/${m}`} target={'_blank'}>Retrieve Data</a>
+                <a href={`/read/${m}?limit=100`} target={'_blank'}>Retrieve Data</a>
+            </li>)}</ul>
+            <h4>Apps</h4>
+            <ul>{sourceIds.apps.map(m => <li key={m}><code>{m}</code>&nbsp;
+                <a onClick={() => appendSourceId(m, setPromql)}
+                   href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
+                <a href={`/read/${m}?limit=100`} target={'_blank'}>Retrieve Data</a>
             </li>)}</ul>
         </div>
     );
@@ -96,7 +103,11 @@ function loadSourceIds(setSourceIds) {
         .catch(e => console.error(e))
         .then(json => {
             if (json.meta) {
-                setSourceIds(Object.keys(json.meta));
+                const ids = Object.keys(json.meta);
+                setSourceIds({
+                    components: ids.filter(x => x.length !== 36),
+                    apps: ids.filter(x => x.length == 36)
+                });
             } else {
                 alert(JSON.stringify(json, null, '  '));
             }

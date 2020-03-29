@@ -43,7 +43,10 @@ function SupportedMetrics(props) {
                 <dl>
                     {metrics.map(m => {
                         const [name, {type, labels}] = m;
-                        const metricsName = name.replace(/\./g, '_').replace(/\//g, '_');
+                        const metricsName = name.replace(/\./g, '_')
+                            .replace(/\//g, '_')
+                            .replace(/-/g, '_');
+
                         return <Fragment key={name}>
                             <dt><code>{name}</code> ({type})</dt>
                             <dd>

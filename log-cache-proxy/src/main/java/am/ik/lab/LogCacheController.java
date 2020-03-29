@@ -41,7 +41,7 @@ public class LogCacheController {
     @GetMapping(path = "/query_range")
     public Mono<JsonNode> queryRange(@RequestParam(name = "promql") String promql,
                                      @RequestParam(name = "duration", defaultValue = "PT30M") Duration duration,
-                                     @RequestParam(name = "step", defaultValue = "1") int step) {
+                                     @RequestParam(name = "step", defaultValue = "10") int step) {
         final Instant end = Instant.now();
         final Instant begin = end.minus(duration);
         return this.webClient.get()

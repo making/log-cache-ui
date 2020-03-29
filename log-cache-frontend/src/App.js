@@ -8,7 +8,7 @@ function App() {
     const [promql, setPromql] = useState(defaultQuery);
     const [data, setData] = useState([]);
     const [duration, setDuration] = useState('PT30M');
-    const [step, setStep] = useState(5);
+    const [step, setStep] = useState(10);
     const [sourceIds, setSourceIds] = useState([]);
 
     const onKeyDown = event => {
@@ -58,7 +58,7 @@ function App() {
             <h3>Available Source IDs</h3>
             <button onClick={() => loadSourceIds(setSourceIds)}>Load</button>
             <ul>{sourceIds.map(m => <li key={m}><code>{m}</code>&nbsp;
-                <a onClick={() => appendSourceId(m, setPromql)} href={'#'}>Append</a>&nbsp;/&nbsp;
+                <a onClick={() => appendSourceId(m, setPromql)} href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
                 <a href={`/read/${m}`} target={'_blank'}>Retrieve Data</a>
             </li>)}</ul>
         </div>

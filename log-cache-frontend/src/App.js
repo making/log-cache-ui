@@ -14,11 +14,11 @@ function SupportedMetrics(props) {
             json.envelopes.batch
                 .forEach(v => {
                     if (v.counter) {
-                        supported.set(v.counter.name, Object.keys(v.tags));
+                        supported.set(v.counter.name, {type: 'Counter', labels: Object.keys(v.tags)});
                     }
                     if (v.gauge) {
                         Object.keys(v.gauge.metrics)
-                            .forEach(g => supported.set(g, Object.keys(v.tags)))
+                            .forEach(g => supported.set(g, {type: 'Gauge', labels: Object.keys(v.tags)}))
                     }
                 });
             setMetrics([...supported]);
@@ -42,19 +42,25 @@ function SupportedMetrics(props) {
                 <a href={`/read/${sourceId}?limit=100`} target={'_blank'}>See Raw Data</a><br/>
                 <dl>
                     {metrics.map(m => {
-                        const [name, tags] = m;
+                        const [name, {type, labels}] = m;
                         const metricsName = name.replace(/\./g, '_').replace(/\//g, '_');
                         return <Fragment key={name}>
-                            <dt><code>{name}</code></dt>
+                            <dt><code>{name}</code> ({type})</dt>
                             <dd>
                                 <button onClick={() => {
                                     props.setPromql(`${metricsName}{source_id="${sourceId}"}`);
                                     close();
                                 }}>Set PromQL
                                 </button>
+                                &nbsp;
+                                {type === 'Counter' && <button onClick={() => {
+                                    props.setPromql(`rate(${metricsName}{source_id="${sourceId}"}[1m])`);
+                                    close();
+                                }}>Set PromQL (Rate)
+                                </button>}
                                 <br/>
                                 Labels:
-                                <code>{JSON.stringify(tags)}</code>
+                                <code>{JSON.stringify(labels)}</code>
                             </dd>
                         </Fragment>;
                     })}

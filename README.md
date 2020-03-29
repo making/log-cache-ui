@@ -24,6 +24,7 @@ uaac client add log_cache_ui \
 
 ```
 docker run \
+  --rm \
   -e SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_UAA_ISSUER_URI=https://uaa.${SYSTEM_DOMAIN}/oauth/token \
   -e SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_UAA_CLIENT_SECRET=CHANGEME \
   -p 8080:8080 \

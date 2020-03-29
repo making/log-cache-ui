@@ -65,9 +65,13 @@ function App() {
                             return JSON.stringify(d.metric);
                         }
                         if (metrics.application) {
-                            return `${metrics.organization}/${metrics.space}/${metrics.application}/${metrics.applicationInstance}`;
+                            return [metrics.organization, metrics.space, metrics.application, metrics.applicationInstance]
+                                .filter(x => x)
+                                .join('/');
                         }
-                        return `${metrics.ip}/${metrics.deployment}/${metrics.job}`;
+                        return [metrics.ip, metrics.deployment, metrics.job]
+                            .filter(x => x)
+                            .join('/');
                     }}
                     xAxisTooltipFormat={x => `${new Date(x).toLocaleString()}`}
                     yAxisTooltipFormat={y => `${y}`}

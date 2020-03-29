@@ -3,11 +3,12 @@ import {Container, LineChart} from "davi-js";
 import './App.css';
 
 function App() {
+    const defaultQuery = (document.location.hash && document.location.hash.length > 2) ? decodeURIComponent(document.location.hash.replace('#', '')) : '';
     const [isLoading, setIsLoading] = useState(false);
-    const [promql, setPromql] = useState('');
+    const [promql, setPromql] = useState(defaultQuery);
     const [data, setData] = useState([]);
-    const [duration, setDuration] = useState('PT15M');
-    const [step, setStep] = useState(10);
+    const [duration, setDuration] = useState('PT30M');
+    const [step, setStep] = useState(5);
     const [meta, setMeta] = useState([]);
 
     useEffect(() => {
@@ -28,21 +29,28 @@ function App() {
     }, []);
     const onKeyDown = event => {
         if (event.key === 'Enter' && promql.length > 0) {
+            document.location.hash = '#' + encodeURIComponent(promql);
             query(promql, duration, step, setIsLoading, setData);
         }
     };
     return (
         <div className="App">
             <h1>Log Cache UI</h1>
-            <label>PromQL: <input size={150} value={promql} placeholder={'PromQL'}
+            <label>PromQL: <input value={promql}
+                                  size={150}
+                                  placeholder={'PromQL'}
                                   onChange={event => setPromql(event.target.value)}
                                   onKeyDown={onKeyDown}
             /></label>
 
             &nbsp;<label>Duration: <input value={duration}
+                                          size={10}
                                           onChange={event => setDuration(event.target.value)}
                                           onKeyDown={onKeyDown}/></label>
-            &nbsp;<label>Step: <input value={step}
+            &nbsp;<label>Step: <input type={'number'}
+                                      size={5}
+                                      min={1}
+                                      value={step}
                                       onChange={event => setStep(event.target.value)}
                                       onKeyDown={onKeyDown}/></label>
             <br/>

@@ -32,8 +32,8 @@ public class LogCacheController {
 
     @GetMapping("/query_range")
     public Mono<JsonNode> queryRange(@RequestParam(name = "promql") String promql,
-                                     @RequestParam(name = "duration", defaultValue = "PT1H") Duration duration,
-                                     @RequestParam(name = "step", defaultValue = "50") int step) {
+                                     @RequestParam(name = "duration", defaultValue = "PT30M") Duration duration,
+                                     @RequestParam(name = "step", defaultValue = "1") int step) {
         final Instant end = Instant.now();
         final Instant begin = end.minus(duration);
         return this.webClient.get()
@@ -55,10 +55,7 @@ public class LogCacheController {
     }
 
     @GetMapping("/read/{sourceId}")
-    public Mono<String> read(@PathVariable("sourceId") String sourceId,
-                             @RequestParam(name = "duration", defaultValue = "PT1H") Duration duration) {
-        final Instant end = Instant.now();
-        final Instant begin = end.minus(duration);
+    public Mono<String> read(@PathVariable("sourceId") String sourceId) {
         return this.webClient.get()
                 .uri("/api/v1/read/{sourceId}", sourceId)
                 .exchange()

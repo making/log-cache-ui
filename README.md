@@ -1,6 +1,6 @@
 # Log Cache UI
 
-![image](https://user-images.githubusercontent.com/106908/77830679-79f9a800-716d-11ea-8a51-24821671479b.png)
+![image](https://user-images.githubusercontent.com/106908/77840572-06cf5080-71c4-11ea-988d-badadca5a0d9.png)
 
 ### Create UAA Client
 
@@ -25,8 +25,11 @@ uaac client add log_cache_ui \
 ```
 docker run \
   --rm \
+  -m 256m \
   -e SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_UAA_ISSUER_URI=https://uaa.${SYSTEM_DOMAIN}/oauth/token \
   -e SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_UAA_CLIENT_SECRET=CHANGEME \
+  -e JAVA_OPTS="-XX:ReservedCodeCacheSize=32M -Xss512k" \
+  -e BPL_THREAD_COUNT=20 \
   -p 8080:8080 \
   making/log-cache-ui
 ```

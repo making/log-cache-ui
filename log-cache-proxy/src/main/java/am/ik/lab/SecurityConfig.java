@@ -1,5 +1,6 @@
 package am.ik.lab;
 
+import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -19,9 +20,9 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http.authorizeExchange(exchanges ->
                 exchanges
+                        .matchers(EndpointRequest.to("health", "info", "prometheus")).permitAll()
                         .anyExchange().authenticated())
                 .oauth2Login(withDefaults())
-                .oauth2Client(withDefaults())
                 .csrf().disable()
                 .build();
     }

@@ -3,8 +3,13 @@
 A GUI for Cloud Foundry [Log Cache](https://github.com/cloudfoundry/log-cache-release/blob/develop/src/README.md).
 It's easier than [Log Cache CLI](https://github.com/cloudfoundry/log-cache-cli).
 
+[`rate(ingress{source_id="doppler"}[1m])`](http://localhost:8080/index.html#rate(ingress%7Bsource_id%3D%22doppler%22%7D%5B1m%5D))
 ![image](https://user-images.githubusercontent.com/106908/77842862-3be29f80-71d2-11ea-9616-ed0232a256cb.png)
+
+[`rate(total_requests{source_id="gorouter"}[1m])`](http://localhost:8080/index.html#rate(total_requests%7Bsource_id%3D%22gorouter%22%7D%5B1m%5D))
 ![image](https://user-images.githubusercontent.com/106908/77842871-53218d00-71d2-11ea-963a-aa4a61f76256.png)
+
+[`CapacityRemainingMemory{source_id="rep"}`](http://localhost:8080/index.html#CapacityRemainingMemory%7Bsource_id%3D%22rep%22%7D)
 ![image](https://user-images.githubusercontent.com/106908/77842850-1e153a80-71d2-11ea-913d-0704f43fbfa6.png)
 
 ### Create a UAA Client

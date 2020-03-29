@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Container, LineChart} from "davi-js";
 import './App.css';
 
@@ -9,24 +9,8 @@ function App() {
     const [data, setData] = useState([]);
     const [duration, setDuration] = useState('PT30M');
     const [step, setStep] = useState(5);
-    const [meta, setMeta] = useState([]);
+    const [sourceIds, setSourceIds] = useState([]);
 
-    useEffect(() => {
-        fetch('/meta')
-            .then(res => {
-                return res.json();
-            })
-            .catch(e => console.error(e))
-            .then(json => {
-                if (json.meta) {
-                    setMeta(prevState => {
-                        return Object.keys(json.meta);
-                    });
-                } else {
-                    alert(JSON.stringify(json, null, '  '));
-                }
-            });
-    }, []);
     const onKeyDown = event => {
         if (event.key === 'Enter' && promql.length > 0) {
             document.location.hash = '#' + encodeURIComponent(promql);
@@ -72,12 +56,30 @@ function App() {
                     height={500}/>
             </Container>
             <h3>Available Source IDs</h3>
-            <ul>{meta.map(m => <li key={m}><code>{m}</code>&nbsp;
-                <a onClick={() => appendSourceId(m, setPromql)} href={'#'}>Append</a>&nbsp;
+            <button onClick={() => loadSourceIds(setSourceIds)}>Load</button>
+            <ul>{sourceIds.map(m => <li key={m}><code>{m}</code>&nbsp;
+                <a onClick={() => appendSourceId(m, setPromql)} href={'#'}>Append</a>&nbsp;/&nbsp;
                 <a href={`/read/${m}`} target={'_blank'}>Retrieve Data</a>
             </li>)}</ul>
         </div>
     );
+}
+
+function loadSourceIds(setSourceIds) {
+    fetch('/meta')
+        .then(res => {
+            return res.json();
+        })
+        .catch(e => console.error(e))
+        .then(json => {
+            if (json.meta) {
+                setSourceIds(prevState => {
+                    return Object.keys(json.meta);
+                });
+            } else {
+                alert(JSON.stringify(json, null, '  '));
+            }
+        });
 }
 
 function appendSourceId(sourceId, setPromql) {

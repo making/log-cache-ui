@@ -1,6 +1,68 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Container, LineChart} from "davi-js";
+import {Dialog} from "@reach/dialog";
+import "@reach/dialog/styles.css";
 import './App.css';
+
+function SupportedMetrics(props) {
+    const [showDialog, setShowDialog] = useState(false);
+    const [metrics, setMetrics] = useState([]);
+    const sourceId = props.sourceId;
+    const formatMetrics = (json) => {
+        const supported = new Map();
+        if (json.envelopes && json.envelopes.batch) {
+            json.envelopes.batch
+                .forEach(v => {
+                    if (v.counter) {
+                        supported.set(v.counter.name, Object.keys(v.tags));
+                    }
+                    if (v.gauge) {
+                        Object.keys(v.gauge.metrics)
+                            .forEach(g => supported.set(g, Object.keys(v.tags)))
+                    }
+                });
+            setMetrics([...supported]);
+        }
+    };
+    const open = () => {
+        fetch(`/read/${props.sourceId}?limit=100`)
+            .then(res => res.json())
+            .then(json => formatMetrics(json))
+            .then(() => setShowDialog(true));
+    };
+    const close = () => setShowDialog(false);
+    return (
+        <Fragment>
+            <a href={'#'} onClick={open}><code>{sourceId}</code></a>
+            <Dialog isOpen={showDialog} onDismiss={close}>
+                <button className="close-button" onClick={close}>
+                    <span aria-hidden>×</span>
+                </button>
+                <h3>{sourceId}</h3>
+                <a href={`/read/${sourceId}?limit=100`} target={'_blank'}>See Raw Data</a><br/>
+                <dl>
+                    {metrics.map(m => {
+                        const [name, tags] = m;
+                        const metricsName = name.replace(/\./g, '_').replace(/\//g, '_');
+                        return <Fragment key={name}>
+                            <dt><code>{name}</code></dt>
+                            <dd>
+                                <button onClick={() => {
+                                    props.setPromql(`${metricsName}{source_id="${sourceId}"}`);
+                                    close();
+                                }}>Set PromQL
+                                </button>
+                                <br/>
+                                Labels:
+                                <code>{JSON.stringify(tags)}</code>
+                            </dd>
+                        </Fragment>;
+                    })}
+                </dl>
+            </Dialog>
+        </Fragment>
+    );
+}
 
 function App() {
     const defaultQuery = (document.location.hash && document.location.hash.length > 2) ? decodeURIComponent(document.location.hash.replace('#', '')) : '';
@@ -80,16 +142,14 @@ function App() {
             <h3>Available Source IDs</h3>
             <button onClick={() => loadSourceIds(setSourceIds)}>Load</button>
             <h4>Components</h4>
-            <ul>{sourceIds.components.map(m => <li key={m}><code>{m}</code>&nbsp;
-                <a onClick={() => appendSourceId(m, setPromql)}
-                   href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
-                <a href={`/read/${m}?limit=100`} target={'_blank'}>Retrieve Data</a>
+            <ul>{sourceIds.components.map(sourceId => <li key={sourceId}>
+                <SupportedMetrics sourceId={sourceId}
+                                  setPromql={setPromql}/>
             </li>)}</ul>
             <h4>Apps</h4>
-            <ul>{sourceIds.apps.map(m => <li key={m}><code>{m}</code>&nbsp;
-                <a onClick={() => appendSourceId(m, setPromql)}
-                   href={'#'}>Append <code>source_id</code></a>&nbsp;/&nbsp;
-                <a href={`/read/${m}?limit=100`} target={'_blank'}>Retrieve Data</a>
+            <ul>{sourceIds.apps.map(sourceId => <li key={sourceId}>
+                <SupportedMetrics sourceId={sourceId}
+                                  setPromql={setPromql}/>
             </li>)}</ul>
         </div>
     );
@@ -106,16 +166,12 @@ function loadSourceIds(setSourceIds) {
                 const ids = Object.keys(json.meta);
                 setSourceIds({
                     components: ids.filter(x => x.length !== 36),
-                    apps: ids.filter(x => x.length == 36)
+                    apps: ids.filter(x => x.length === 36)
                 });
             } else {
                 alert(JSON.stringify(json, null, '  '));
             }
         });
-}
-
-function appendSourceId(sourceId, setPromql) {
-    setPromql(promql => promql.indexOf('{') > 0 ? promql.replace('{', `{source_id="${sourceId}", `) : `${promql}{source_id="${sourceId}"}`);
 }
 
 function query(promql, duration, step, setIsLoading, setData) {

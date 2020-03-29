@@ -9,7 +9,7 @@ function App() {
     const [data, setData] = useState([]);
     const [duration, setDuration] = useState('PT30M');
     const [step, setStep] = useState(10);
-    const [autoReload, setAutoReload] = useState(false);
+    const [autoReload, setAutoReload] = useState(null);
     const [sourceIds, setSourceIds] = useState([]);
 
     const onKeyDown = event => {
@@ -18,7 +18,6 @@ function App() {
             query(promql, duration, step, setIsLoading, setData);
         }
     };
-    const reload = () => onKeyDown({key: 'Enter'});
     return (
         <div className="App">
             <h1>Log Cache UI</h1>
@@ -42,11 +41,11 @@ function App() {
             <br/>
             <label>Auto Reload: <input type="checkbox" onChange={event => {
                 const checked = event.target.checked;
-                setAutoReload(checked);
                 if (checked) {
-                    setInterval(reload, 30000);
+                    setAutoReload(setInterval(() => onKeyDown({key: 'Enter'}), 30000));
                 } else {
-                    clearInterval(reload);
+                    clearInterval(autoReload);
+                    setAutoReload(null);
                 }
             }}/></label>
             <br/>

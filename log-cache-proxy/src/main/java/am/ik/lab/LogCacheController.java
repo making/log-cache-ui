@@ -66,7 +66,7 @@ public class LogCacheController {
     public Mono<String> read(@PathVariable("sourceId") String sourceId,
                              @RequestParam(name = "limit", defaultValue = "100") int limit) {
         return this.webClient.get()
-                .uri("/api/v1/read/{sourceId}?envelope_types=COUNTER&envelope_types=GAUGE&envelope_types=TIMER&limit={limit}", sourceId, limit)
+                .uri("/api/v1/read/{sourceId}?envelope_types=COUNTER&envelope_types=GAUGE&limit={limit}", sourceId, limit)
                 .exchange()
                 .flatMap(res -> res.bodyToMono(String.class));
     }

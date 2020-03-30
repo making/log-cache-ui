@@ -135,6 +135,11 @@ function App() {
                         if (showAllLabels) {
                             return JSON.stringify(d.metric);
                         }
+                        if (metrics.app_name) {
+                            return [metrics.organization_name, metrics.space_name, metrics.app_name, metrics.instance_id]
+                                .filter(x => x)
+                                .join('/');
+                        }
                         if (metrics.application) {
                             return [metrics.organization, metrics.space, metrics.application, metrics.applicationInstance]
                                 .filter(x => x)

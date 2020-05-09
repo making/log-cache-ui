@@ -33,13 +33,14 @@ function SupportedMetrics(props) {
     const close = () => setShowDialog(false);
     return (
         <Fragment>
-            <a href={'#'} onClick={open}><code>{sourceId}</code></a>
+            <button onClick={open}>{sourceId}</button>
             <Dialog isOpen={showDialog} onDismiss={close}>
                 <button className="close-button" onClick={close}>
                     <span aria-hidden>×</span>
                 </button>
                 <h3>{sourceId}</h3>
-                <a href={`/read/${sourceId}?limit=100`} target={'_blank'}>See Raw Data</a><br/>
+                <a href={`/read/${sourceId}?limit=100`} target={'_blank'} rel="noopener noreferrer">See Raw
+                    Data</a><br/>
                 <dl>
                     {metrics.map(m => {
                         const [name, {type, labels}] = m;

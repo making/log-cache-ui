@@ -47,5 +47,5 @@ jobs:
         rm -f pack-*.tgz
         ./pack build making/log-cache-ui \
           -p log-cache-proxy/target/log-cache-proxy-*.jar  \
-          --builder cloudfoundry/cnb:bionic \
-          --publish
+          --builder gcr.io/paketo-buildpacks/builder:base
+        docker push making/log-cache-ui

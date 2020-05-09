@@ -65,7 +65,7 @@ docker run \
   -e SYSTEM_DOMAIN=${SYSTEM_DOMAIN} \
   -e UAA_CLIENT_SECRET=CHANGEME \
   -e JAVA_OPTS="-XX:ReservedCodeCacheSize=32M -Xss512k" \
-  -e BPL_THREAD_COUNT=20 \
+  -e BPL_JVM_THREAD_COUNT=20 \
   -p 8080:8080 \
   making/log-cache-ui
 ```
@@ -82,7 +82,7 @@ applications:
     SYSTEM_DOMAIN: ((system_domain))
     UAA_CLIENT_SECRET: CHANGEME
     JAVA_OPTS: "-XX:ReservedCodeCacheSize=32M -Xss512k"
-    BPL_THREAD_COUNT: 20
+    BPL_JVM_THREAD_COUNT: 20
 ```
 
 then

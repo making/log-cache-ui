@@ -7,4 +7,4 @@ applications:
     SYSTEM_DOMAIN: ((system_domain))
     UAA_CLIENT_SECRET: CHANGEME
     JAVA_OPTS: "-XX:ReservedCodeCacheSize=32M -Xss512k"
-    BPL_THREAD_COUNT: 20
+    BPL_JVM_THREAD_COUNT: 20

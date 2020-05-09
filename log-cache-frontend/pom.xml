@@ -12,7 +12,7 @@
     <artifactId>log-cache-frontend</artifactId>
 
     <properties>
-        <frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
     </properties>
 
     <build>
